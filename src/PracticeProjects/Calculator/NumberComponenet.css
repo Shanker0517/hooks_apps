@@ -1,0 +1,66 @@
+
+/* @media (max-width: 768px) {
+    .box {
+      width: 80%;
+      height: auto;
+    }
+  } */
+.cal{
+    width: 500px;
+    height: 400px;
+    margin: 10px;
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+#Numbersdisplay{
+   
+    padding: 40px;
+    word-wrap: break-word;
+    word-break: break-all;
+    color: antiquewhite;
+    background-color:#1A2027;
+}
+.Buttonsbox{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+.rect{
+    height: auto;
+    width:75%;
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color:#1A2027; 
+    border: 2px solid #fff ;
+}
+.num{
+    color: #fff;
+    background-color:#1A2027;
+    height: auto;
+    width: 120px;
+    font-size: 3rem;
+}
+
+.colu{
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-color:#1A2027;
+    height: auto;
+    width: 25%;
+    font-size: 2rem;
+    border: 2px solid #fff ;    
+}
+
+.sidebutton{
+    color: #fff;
+    background-color:#1A2027;
+    height: auto;
+    width: 100%;
+    font-size: 3rem;
+    border: 2px solid #fff ;
+    align-items: center;
+    align-content: flex-end;
+}

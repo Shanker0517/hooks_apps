@@ -1,0 +1,452 @@
+import React from "react";
+import {
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  Typography,
+  AppBar,
+  TableFooter,
+} from "@mui/material";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import {
+  AddPractice,
+  getAllPractice,
+  UpdatePractice,
+  DeletePractice,
+} from "../APIServices/PracticeAPIServies";
+// /react_hooks/hooks_apps/src/PracticeProjects/
+export default function Practice() {
+  const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [loadingData, setloadingData] = React.useState(true);
+  const [editMode, seteditMode] = React.useState(false);
+  const [practiceData, setPracticeData] = React.useState();
+  const [practice, setPractice] = React.useState({
+    Practice: "",
+    IsActive: true,
+    CreatedBy: 1,
+    CreatedDateTime: "",
+    ModifiedDateTime: "",
+    ModifiedBy: 1,
+  });
+
+  const fetchData = async () => {
+    try {
+      const practicedata = await getAllPractice();
+      setPracticeData(practicedata.data);
+      setloadingData(false);
+    } catch (error) {
+      // setError(error);
+      setloadingData(false);
+    }
+  };
+  React.useEffect(() => {
+    console.log("rendering");
+    fetchData();
+  }, []);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const onChangePracticeInput = (e) => {
+    const data = e.target.value;
+
+    setPractice({ ...practice, Practice: data });
+    // console.log(practice);
+  };
+  const handleAddPractice = () => {
+    // console.log(practice)
+    AddPractice(practice).then((response) => {
+      setPracticeData(...practiceData, response.data);
+      setPractice({ Practice: "" });
+      setloadingData(true);
+      fetchData();
+    });
+
+    setOpen(false);
+  };
+
+  const handleUpdate = (data) => {
+    setPractice({ ...data, IsActive: true });
+    setOpen(true);
+  };
+  const handleUpdatePractice = (Id, Data) => {
+    UpdatePractice(Id, Data).then((response) => {
+      setloadingData(true);
+      fetchData();
+    });
+  };
+  const onChangePracticeUpdateInput = (data) => {
+    handleUpdatePractice(data.Id, data);
+    setPractice({ ...data, Practice: "" });
+    seteditMode(false);
+    setOpen(false);
+  };
+
+  const handleDelete = (Id) => {
+    console.log(Id);
+    DeletePractice(Id).then((response) => {
+      console.log(response.data);
+      setloadingData(true);
+      fetchData();
+    });
+  };
+
+  const handleClose = () => {
+    setPractice({ Practice: "" });
+    setOpen(false);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  return (
+    <>
+      <Box
+        sx={{
+          height: "44px",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "15px",
+          }}
+        >
+          <Typography
+            style={{
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "17px",
+              fontWeight: "700",
+              lineHeight: "24px",
+              letterSpacing: "0em",
+              textAlign: "left",
+            }}
+          >
+            Practice
+          </Typography>
+          <Typography
+            style={{
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "12px",
+              fontWeight: "400",
+              lineHeight: "18px",
+              letteSrpacing: "0em",
+              textAlign: "left",
+            }}
+          >
+            Please check the Practice details
+          </Typography>
+        </Box>
+        <Box>
+          <Box>
+            <Paper
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "0px 2px 16px 0px #68B0DA0A",
+                height: "580px",
+                borderRadius: "8px",
+              }}
+            >
+              <Box>
+                <Box>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingleft: "30px",
+                      paddingRight: "20px",
+                      paddingTop: "30px",
+                      // alignItems: 'center',
+                      paddingBottom: "20px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div
+                        style={{
+                          paddingTop: "8px",
+                        }}
+                      >
+                        <Typography
+                          style={{
+                            fontFamily: "Poppins, sans-serif",
+                            fontSize: "17px",
+                            fontWeight: "700",
+                            lineHeight: "24px",
+                            letterSpacing: "0em",
+                          }}
+                        >
+                          Practice List
+                        </Typography>
+                      </div>
+                      <div
+                        style={{
+                          width: "15px",
+                        }}
+                      ></div>
+                      <div
+                        style={{
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <SearchRoundedIcon
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                          }}
+                        ></SearchRoundedIcon>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={handleClickOpen}
+                      style={{
+                        width: "150px",
+                        height: "40px",
+                        backgroundColor: "#1C2F72",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontFamily: "Poppins, sans-serif",
+                          fontSize: "18px",
+                          fontWeight: "500",
+                          lineHeight: "20px",
+                          letterSpacing: "0em",
+                          textAlign: "left",
+                          color: "#FFFFFF",
+                          paddingRight: "5px",
+                        }}
+                      >
+                        +
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "Poppins, sans-serif",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          lineHeight: "20px",
+                          letterSpacing: "0em",
+                          textAlign: "left",
+                          color: "#FFFFFF",
+                        }}
+                      >
+                        Add Practice
+                      </div>
+                    </Button>
+                    <Box display={"none"}>
+                      {/* {console.log(editMode)} */}
+                      {editMode ? (
+                        <Dialog open={open} onClose={handleClose}>
+                          <DialogTitle>Practice</DialogTitle>
+                          <DialogContent>
+                            <label>Practice Name</label>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              name="practice"
+                              type="text"
+                              fullWidth
+                              variant="standard"
+                              placeholder="Edit Practice"
+                              value={practice.Practice}
+                              onChange={onChangePracticeInput}
+                            />
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button
+                              onClick={() => {
+                                onChangePracticeUpdateInput(practice);
+                                setOpen(false);
+                              }}
+                            >
+                              Edit Practice
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      ) : (
+                        <Dialog open={open} onClose={handleClose}>
+                          <DialogTitle>Practice</DialogTitle>
+                          <DialogContent>
+                            <label>Practice Name</label>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              name="practice"
+                              type="text"
+                              fullWidth
+                              variant="standard"
+                              placeholder="Add Practice"
+                              value={practice.Practice}
+                              onChange={onChangePracticeInput}
+                            />
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={handleAddPractice}>
+                              Add Practice
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      )}
+                    </Box>
+                  </div>
+                </Box>
+              </Box>
+              <Box>
+                {
+                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell align="left" paddingleft="20px">
+                              Id
+                            </TableCell>
+                            <TableCell align="center">Practice</TableCell>
+                            <TableCell align="center">IsActive</TableCell>
+                            <TableCell align="center">CreatedBy</TableCell>
+                            <TableCell align="center">
+                              CreatedDateTime
+                            </TableCell>
+                            <TableCell align="center">ModifiedBy</TableCell>
+                            <TableCell align="center">
+                              ModifiedDateTime
+                            </TableCell>
+                            <TableCell align="center">Actions</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {loadingData ? (
+                            <Box>...Loading Data</Box>
+                          ) : practiceData === undefined ||
+                            practiceData === null ? (
+                            <TableRow>
+                              <TableCell colSpan={9} align="center">
+                                <div>No data</div>
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            practiceData
+                              .slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              .map((row, i) => {
+                                let count = page * rowsPerPage + i + 1;
+                                return (
+                                  <TableRow key={row.Id}>
+                                    <TableCell align="center">
+                                      {count}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.Practice}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.IsActive ? "Yes" : "No"}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.CreatedBy}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.CreatedDateTime}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.ModifiedBy}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {row.ModifiedDateTime}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      `
+                                      <IconButton
+                                        onClick={() => {
+                                          seteditMode(true);
+                                          handleUpdate(row);
+                                        }}
+                                      >
+                                        <CreateRoundedIcon paddingright="20px" />
+                                      </IconButton>
+                                      <IconButton
+                                        onClick={() => handleDelete(row.Id)}
+                                      >
+                                        <DeleteRoundedIcon paddingleft="20px" />
+                                      </IconButton>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })
+                          )}
+                        </TableBody>
+                        {/* <TableFooter>
+                {practiceData === undefined || practiceData === null ? (
+                  (<></>)
+                ) : (
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component="div"
+                    count={practiceData.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                )}
+              </TableFooter> */}
+                      </Table>
+                    </TableContainer>
+                    
+                  </Paper>
+                }
+          {/* <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component="div"
+                    count={practiceData.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  /> */}
+              </Box>
+            </Paper>
+          </Box>
+        </Box>
+      </Box>
+    </>
+  );
+}

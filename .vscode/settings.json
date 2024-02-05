@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "C:\\Users\\shankerk\\Desktop\\Django_Proj\\Django_React\\UserCrud\\UserCrud\\db.sqlite3",
+            "name": "RMT"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

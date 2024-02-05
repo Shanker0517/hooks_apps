@@ -1,0 +1,13 @@
+cosumer
+const data = React.useContext(ComponentsData);
+
+provider
+export default function Roles(){
+    let data={ComponentName:'Role'}
+    return (
+        <ComponentsData.Provider value={data}>
+        <CommonBox>
+        </CommonBox>
+        </ComponentsData.Provider>
+    )
+}
